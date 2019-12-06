@@ -42,8 +42,8 @@ public class TomcatStarter {
 
 
             // 4. 设置webapp资源路径
-            String webappDirLocation = "webapp/";
-            StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
+            String webappDirLocation = "E:\\monitor\\tomcat\\basedir\\apache-tomcat-8.5.43\\webapps\\monitor";
+            StandardContext ctx = (StandardContext) tomcat.addWebapp("/monitor", new File(webappDirLocation).getAbsolutePath());
             log.info("configuring app with basedir: " + new File("" + webappDirLocation).getAbsolutePath());
             log.info("project dir:"+new File("").getAbsolutePath());
 
