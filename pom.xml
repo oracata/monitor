@@ -115,7 +115,11 @@
       <version>${slf4j.version}</version>
     </dependency>
     <!-- log end -->
-
+      <dependency>
+          <groupId>ch.ethz.ganymed</groupId>
+          <artifactId>ganymed-ssh2</artifactId>
+          <version>262</version>
+      </dependency>
   </dependencies>
 
 
@@ -201,8 +205,18 @@
       </plugins>
 
     </pluginManagement>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>8</source>
+                  <target>8</target>
+              </configuration>
+          </plugin>
+      </plugins>
 
-    <!-- 资源输出路径配置 -->
+      <!-- 资源输出路径配置 -->
     <resources>
       <resource>
         <directory>src/main/java</directory>

@@ -1,17 +1,27 @@
 package com.oracat;
 
+import com.oracat.model.Machine;
 import com.oracat.tools.EnvConfig;
+import com.oracat.tools.MachineInfo;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class TomcatStarter {
 
-    private static Logger log = LoggerFactory.getLogger(TomcatStarter.class);
-
+    //log加载
+    public static final Logger logger=LoggerFactory.getLogger(TomcatStarter.class);
+    //主机信息模型实列化
+    public static ConcurrentHashMap<String, Machine> testmachineHashMap= new ConcurrentHashMap<String,Machine>();
 
     /**
      *
@@ -23,7 +33,7 @@ public class TomcatStarter {
     public static void main(String[] args) throws Exception {
         try {
             if (!EnvConfig.init()) {
-                log.info("加載配置文件失敗。");
+                logger.info("加載配置文件失敗。");
                 System.exit(0);
             }
             // 1.创建一个内嵌的Tomcat
@@ -44,8 +54,8 @@ public class TomcatStarter {
             // 4. 设置webapp资源路径
             String webappDirLocation = "E:\\monitor\\tomcat\\basedir\\apache-tomcat-8.5.43\\webapps\\monitor";
             StandardContext ctx = (StandardContext) tomcat.addWebapp("/monitor", new File(webappDirLocation).getAbsolutePath());
-            log.info("configuring app with basedir: " + new File("" + webappDirLocation).getAbsolutePath());
-            log.info("project dir:"+new File("").getAbsolutePath());
+            logger.info("configuring app with basedir: " + new File("" + webappDirLocation).getAbsolutePath());
+            logger.info("project dir:"+new File("").getAbsolutePath());
 
 
             // 5. 设置上下文路每径
@@ -59,21 +69,74 @@ public class TomcatStarter {
             tomcat.getHost().addChild(ctx);
 
 
-/* File additionWebInfClasses = new File("");
- WebResourceRoot resources = new StandardRoot(ctx);
- resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
- additionWebInfClasses.getAbsolutePath() + "/classes", "/"));
- ctx.setResources(resources);
- */
 
 
-            log.info("服务器加载完配置，正在启动中……");
+
+            logger.info("服务器加载完配置，正在启动中……");
             tomcat.start();
-            log.info("服务器启动成功");
-            tomcat.getServer().await();
+            logger.info("服务器启动成功");
+          //  tomcat.getServer().await();
         } catch (Exception exception) {
-            log.error("服务器启动失敗", exception);
+            logger.error("服务器启动失敗", exception);
         }
+
+        XMLConfiguration testConfig=new XMLConfiguration("classpath:testip.xml");
+        XMLConfiguration sysConfig=new XMLConfiguration("classpath:sys.xml");
+        final long sleepTime=sysConfig.getLong("sleep_time");
+
+
+        while(true)
+        {
+
+
+            //etl
+            List<String> testipList=testConfig.getList("machine.ip");
+            Iterator<String> testitr=testipList.iterator();
+            int	i=0;
+
+
+
+
+            //循环ip
+            while(testitr.hasNext())
+            {
+
+                String ip=testitr.next();
+
+
+
+
+                //生成 每个xml配置的hashmap
+                HashMap<String,String> testHashMapXML=new HashMap<String,String>();
+                HierarchicalConfiguration sub = (HierarchicalConfiguration)testConfig.subset("machine("+i+")");
+                Iterator<String> itr=testConfig.getKeys(); //获取当前XMLConfiguration对象可以使用的key
+                while(itr.hasNext()){
+                    String[] key=itr.next().split("\\.");
+
+                    testHashMapXML.put(key[1], sub.getString(key[1]));
+
+                }
+
+
+
+                //获取主机信息
+
+                //MachineInfo machineInfo=new MachineInfo( ip, etlipConfig.getString("machine("+i+").username"),etlipConfig.getString("machine("+i+").password"));
+                MachineInfo machineInfo=new MachineInfo(testHashMapXML);
+
+                testmachineHashMap.put(ip+"("+testConfig.getString("machine("+i+").host")+")",machineInfo.getInfo());
+                i++;
+            }
+
+
+
+
+            Thread.currentThread().sleep(sleepTime);
+
+        }
+
+
+
     }
 
 

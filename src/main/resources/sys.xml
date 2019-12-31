@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<configuration>
+    <sleep_time>5000</sleep_time>
+    <hive_url/>
+    <hive_username/>
+    <hive_password/>
+    <data_quarts_job>0 6 12\,13 * * ?</data_quarts_job>
+    <data_monitor_quarts_job>0/5 * * * * ?</data_monitor_quarts_job>
+</configuration>

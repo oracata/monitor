@@ -1,0 +1,5 @@
+<machines>
+    <machine><host>test_server</host><ip>10.0.0.23</ip><username>root</username><password>Lenovo2014@</password></machine>
+
+
+</machines>
