@@ -3,6 +3,7 @@ package com.oracat;
 import com.oracat.model.Machine;
 import com.oracat.tools.EnvConfig;
 import com.oracat.tools.MachineInfo;
+import com.oracat.tools.PythonInvoke;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -123,8 +124,23 @@ public class TomcatStarter {
 
                 //MachineInfo machineInfo=new MachineInfo( ip, etlipConfig.getString("machine("+i+").username"),etlipConfig.getString("machine("+i+").password"));
                 MachineInfo machineInfo=new MachineInfo(testHashMapXML);
+                System.out.println("ip："+ip);
+                System.out.println("staue："+machineInfo.getInfo().isConnectstatu());
+
+                //连接失败执行发短信
+                if(!machineInfo.getInfo().isConnectstatu()){
+                    String []para=new String[] {"cmd", "/k", "e:\\ProgramData\\Anaconda3\\Scripts\\activate.bat e:\\ProgramData\\Anaconda3&conda activate python27& python C:\\Users\\oracat\\smsauto.py 13987112298 "+"服务器"+ip+"无法连通，请检查！ &exit"};
+
+                    PythonInvoke pi=new PythonInvoke();
+                    pi.invokePy(para);
+                }
+
 
                 testmachineHashMap.put(ip+"("+testConfig.getString("machine("+i+").host")+")",machineInfo.getInfo());
+
+
+
+
                 i++;
             }
 

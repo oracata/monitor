@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <configuration>
-    <sleep_time>5000</sleep_time>
+    <sleep_time>60000</sleep_time>
     <hive_url/>
     <hive_username/>
     <hive_password/>

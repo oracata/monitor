@@ -29,6 +29,7 @@ public class MachineInfo {
 
         try{
             con.connect();
+            info.setConnectstatu(true);
         }
         catch(IOException e)
         {
@@ -36,6 +37,7 @@ public class MachineInfo {
             e.printStackTrace();
             //初始化
             info.init();
+            info.setConnectstatu(false);
             System.out.println("connect fail! ");
             TomcatStarter.logger.info(hashMapXML.get("ip")+" connect fail!");
             con.close();
@@ -66,17 +68,19 @@ public class MachineInfo {
                 info.setIo(this.getIo(sesIo));
                 sesIo.close();
 
-
+               /*
                 Session	 sesNetwork=con.openSession();
                 info.setNetwork(this.getNetwork(sesNetwork));
                 sesNetwork.close();
-
+             */
 
                 con.close();
 
             }
             else
             {
+                info.setConnectstatu(false);
+
                 System.out.println(hashMapXML.get("ip")+" authenticate fail!");
                 TomcatStarter.logger.info(hashMapXML.get("ip")+" authenticate fail!");
 

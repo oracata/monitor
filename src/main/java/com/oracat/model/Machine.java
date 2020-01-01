@@ -4,11 +4,26 @@ public class Machine {
 
 
     private String ip ;
+
+
+
+    private boolean connectstatu=false;
     private String memery="unkown";
     private String cpu="unkown";
     private String network="unkown";
     private String disc="unkown";
     private String io="unkown";
+
+
+
+    public boolean isConnectstatu() {
+        return connectstatu;
+    }
+
+    public void setConnectstatu(boolean connectstatu) {
+        this.connectstatu = connectstatu;
+    }
+
     public String  getMemery()
     {
         return this.memery;

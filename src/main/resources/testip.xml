@@ -1,5 +1,5 @@
 <machines>
-    <machine><host>test_server</host><ip>10.0.0.23</ip><username>root</username><password>Lenovo2014@</password></machine>
-
+    <machine><os>linux</os><host>test_server</host><ip>10.0.0.23</ip><username>root</username><password>TGVub3ZvMjAxNEA=</password></machine>
+    <machine><os>windows</os><host>local_server</host><ip>172.16.3.1</ip><username>root</username><password>MXFhekBXU1g=</password></machine>
 
 </machines>
